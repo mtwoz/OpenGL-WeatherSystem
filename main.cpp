@@ -1,6 +1,9 @@
 #include "main.h"
 
 std::vector<Snow> snow = {};
+Camera camera;
+
+Point mouse_pointer = {0, 0};
 
 void generateObjects() {
     for (int i = 0; i <= SNOW_COUNT; i++) {
@@ -12,6 +15,7 @@ void drawScene() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    camera.update();
 
     for (auto &it: snow) {
         it.draw();
@@ -51,8 +55,28 @@ void timerHandler(int value) {
 void keyboardHandler(unsigned char key, int x, int y) {
     if (key == 'q' || key == 'Q')
         exit(0);
+    else if (key == 'w' || key == 'W')
+        camera.moveForward();
+    else if (key == 's' || key == 'S')
+        camera.moveBackward();
+    else if (key == 'a' || key == 'A')
+        camera.moveLeft();
+    else if (key == 'd' || key == 'D')
+        camera.moveRight();
+    else if (key == 'z' || key == 'Z')
+        camera.moveUp();
+    else if (key == 'x' || key == 'X')
+        camera.moveDown();
+}
 
-    glutPostRedisplay();
+void mouseHandler(int button, int state, int x, int y) {
+
+}
+
+void passiveMotionHandler(int x, int y) {
+//    mouse_pointer.x = (float) x / (float) glutGet(GLUT_WINDOW_WIDTH) * WIDTH;
+//    mouse_pointer.y = (float) y / (float) glutGet(GLUT_WINDOW_HEIGHT) * HEIGHT;
+    camera.rotate(x, y);
 }
 
 void idle() {
@@ -63,8 +87,7 @@ int main(int argc, char **argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(WIDTH, HEIGHT);
-    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - WIDTH) / 2,
-                           (glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT) / 2);
+    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - WIDTH) / 2, (glutGet(GLUT_SCREEN_HEIGHT) - HEIGHT) / 2);
     glutCreateWindow("Weather System");
     glutSetCursor(GLUT_CURSOR_NONE);
 
@@ -79,6 +102,8 @@ int main(int argc, char **argv) {
     glutKeyboardFunc(keyboardHandler);
     glutReshapeFunc(reshape);
     glutDisplayFunc(drawScene);
+//    glutMouseFunc(mouseHandler);
+//    glutPassiveMotionFunc(passiveMotionHandler);
 
     glutTimerFunc(1000 / 60, timerHandler, 0);
 

@@ -6,6 +6,7 @@
 
 #define WIDTH 1280
 #define HEIGHT 720
+#define DEG_TO_RAD 0.01745329
 
 // store points
 typedef struct {
