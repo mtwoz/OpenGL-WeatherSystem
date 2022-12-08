@@ -22,6 +22,8 @@
 #define CENTER_Y_STEP EYE_Y_STEP
 #define CENTER_Z_STEP EYE_Z_STEP
 
+#define TURN_ANGLE 4.0
+
 class Camera {
 public:
     Camera();
@@ -44,6 +46,10 @@ public:
 
     void rotate(int dx, int dy);
 
+    // latitude and longitude
+    float lat, lon;
+    float m_lat, m_lon;
+
 private:
     // perspective
     float fovy;
@@ -54,6 +60,4 @@ private:
     float eye_x, eye_y, eye_z;
     float center_x, center_y, center_z;
     float up_x, up_y, up_z;
-
-    float pitch, yaw;
 };

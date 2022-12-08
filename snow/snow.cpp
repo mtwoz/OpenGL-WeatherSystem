@@ -1,9 +1,9 @@
 #include "snow.h"
 
 Snow::Snow() {
-    this->position = Point{(float) (rand() % 21) - 10,
+    this->position = Point{randomFloat(0, 44),
                            10.0,
-                           (float) (rand() % 21) - 10};
+                           randomFloat(0, 28)};
 
     this->color[0] = 1;
     this->color[1] = 1;
@@ -19,9 +19,9 @@ Snow::Snow() {
 }
 
 void Snow::reset() {
-    this->position = Point{(float) (rand() % 21) - 10,
+    this->position = Point{randomFloat(0, 44),
                            10.0,
-                           (float) (rand() % 21) - 10};
+                           randomFloat(0, 28)};
 
     this->vel = 0.0;
     this->gravity = -0.8;

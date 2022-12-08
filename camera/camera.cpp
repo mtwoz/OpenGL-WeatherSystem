@@ -16,8 +16,8 @@ Camera::Camera() {
     this->up_y = 1.0f;
     this->up_z = 0.0f;
 
-    this->pitch = 0.0f;
-    this->yaw = 0.0f;
+    this->lat = 0.0f;
+    this->lon = 255.0f;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -25,13 +25,9 @@ Camera::Camera() {
 }
 
 void Camera::update() {
-//    this->center_x = this->eye_x + (float) (cos((lat + m_lat) * DEG_TO_RAD) * sin((lon + m_lon) * DEG_TO_RAD));
-//    this->center_y = this->eye_y + (float) (sin((lat + m_lat) * DEG_TO_RAD));
-//    this->center_z = this->eye_z + (float) (cos((lat + m_lat) * DEG_TO_RAD) * cos((lon + m_lon) * DEG_TO_RAD));
-
-    this->center_x = eye_x - std::sin(this->yaw);
-    this->center_y = eye_y + std::tan(this->pitch);
-    this->center_z = eye_z - std::cos(this->yaw);
+    this->center_x = this->eye_x + (float) (cos((lat + m_lat) * DEG_TO_RAD) * sin((lon + m_lon) * DEG_TO_RAD));
+    this->center_y = this->eye_y + (float) (sin((lat + m_lat) * DEG_TO_RAD));
+    this->center_z = this->eye_z + (float) (cos((lat + m_lat) * DEG_TO_RAD) * cos((lon + m_lon) * DEG_TO_RAD));
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -44,23 +40,15 @@ void Camera::update() {
 }
 
 void Camera::moveForward() {
-//    this->eye_x += (float) sin(lon * DEG_TO_RAD) * EYE_STEP;
-//    this->eye_y += (float) sin(lat * DEG_TO_RAD) * EYE_STEP;
-//    this->eye_z += (float) cos(lon * DEG_TO_RAD) * EYE_STEP;
-
-    this->eye_x -= std::cos(pitch) * std::sin(yaw) * EYE_STEP;
-    this->eye_y += std::sin(pitch) * EYE_STEP;
-    this->eye_z -= std::cos(pitch) * std::cos(yaw) * EYE_STEP;
+    this->eye_x += (float) sin(lon * DEG_TO_RAD) * EYE_STEP;
+    this->eye_y += (float) sin(lat * DEG_TO_RAD) * EYE_STEP;
+    this->eye_z += (float) cos(lon * DEG_TO_RAD) * EYE_STEP;
 }
 
 void Camera::moveBackward() {
-//    this->eye_x -= (float) sin(lon * DEG_TO_RAD) * EYE_STEP;
-//    this->eye_y -= (float) sin(lat * DEG_TO_RAD) * EYE_STEP;
-//    this->eye_z -= (float) cos(lon * DEG_TO_RAD) * EYE_STEP;
-
-    this->eye_x -= std::cos(pitch) * std::sin(yaw) * EYE_STEP * -1;
-    this->eye_y += std::sin(pitch) * EYE_STEP * -1;
-    this->eye_z -= std::cos(pitch) * std::cos(yaw) * EYE_STEP * -1;
+    this->eye_x -= (float) sin(lon * DEG_TO_RAD) * EYE_STEP;
+    this->eye_y -= (float) sin(lat * DEG_TO_RAD) * EYE_STEP;
+    this->eye_z -= (float) cos(lon * DEG_TO_RAD) * EYE_STEP;
 }
 
 void Camera::moveUp() {
@@ -72,14 +60,12 @@ void Camera::moveDown() {
 }
 
 void Camera::moveLeft() {
-    this->eye_x -= EYE_X_STEP;
+    this->lon += TURN_ANGLE;
 }
 
 void Camera::moveRight() {
-    this->eye_x += EYE_X_STEP;
+    this->lon -= TURN_ANGLE;
 }
 
 void Camera::rotate(int dx, int dy) {
-    this->yaw += (float) dx / 800;
-    this->pitch += (float) dy / 800;
 }
