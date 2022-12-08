@@ -7,10 +7,6 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
-extern float zoom;
-extern float pan;
-extern float tilt;
-
 // store points
 typedef struct {
     GLfloat x, y, z;

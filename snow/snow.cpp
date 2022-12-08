@@ -1,6 +1,5 @@
 #include "snow.h"
 
-// constructor of Snow class
 Snow::Snow() {
     this->position = Point{(float) (rand() % 21) - 10,
                            10.0,
@@ -17,7 +16,6 @@ Snow::Snow() {
     this->alive = true;
     this->life = 1.0;
     this->fade = float(rand() % 100) / 1000.0f + 0.003f;
-
 }
 
 void Snow::reset() {
@@ -32,16 +30,14 @@ void Snow::reset() {
     this->fade = float(rand() % 100) / 1000.0f + 0.003f;
 }
 
-// draw snow
 void Snow::draw() {
     glColor4f(this->color[0], this->color[1], this->color[2], this->color[3]);
     glPushMatrix();
-    glTranslatef(this->position.x, this->position.y, this->position.z + zoom);
+    glTranslatef(this->position.x, this->position.y, this->position.z - 40);
     glutSolidSphere(0.2, 16, 16);
     glPopMatrix();
 }
 
-// update snow state and values, and choose the right time to reset them
 void Snow::update() {
     this->position.y += this->vel / 100;
     this->vel += this->gravity;
