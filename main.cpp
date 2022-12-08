@@ -7,57 +7,27 @@ std::vector<char> singleRow;
 std::vector<std::vector<char>> listOfRows;
 
 Point mouse_pointer = {0, 0};
-uint textureGrass;
+uint texture[2];
 
-GLuint loadBMP(const char *fileName) {
-    FILE *file;
-    unsigned char header[54];
-    unsigned int dataPos;
-    unsigned int size;
-    unsigned int width, height;
-    unsigned char *data;
+std::vector<GLubyte *> p;
 
-
-    file = fopen(fileName, "rb");
-
-    if (file == NULL) {
-        std::cout << "Invalid file 1" << std::endl;
-        return false;
-    }
-
-    if (fread(header, 1, 54, file) != 54) {
-        std::cout << "Invalid file 2" << std::endl;
-        return false;
-    }
-
-    if (header[0] != 'B' || header[1] != 'M') {
-        std::cout << "Invalid file 3" << std::endl;
-        return false;
-    }
-
-    dataPos = *(int *) &(header[0x0A]);
-    size = *(int *) &(header[0x22]);
-    width = *(int *) &(header[0x12]);
-    height = *(int *) &(header[0x16]);
-
-    if (size == 0)
-        size = width * height * 3;
-    if (dataPos == 0)
-        dataPos = 54;
-
-    data = new unsigned char[size];
-
-    fread(data, 1, size, file);
-
-    fclose(file);
-
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
-    return texture;
+void ReadImage(const char path[256], GLint &image_w, GLint &image_h, GLint &pixel_l) {
+    GLubyte *pixeldata;
+    FILE *p_file;
+    p_file = fopen(path, "rb");
+    if (p_file == nullptr) exit(0);
+    fseek(p_file, 0x0012, SEEK_SET);
+    fread(&image_w, sizeof(image_w), 1, p_file);
+    fread(&image_h, sizeof(image_h), 1, p_file);
+    pixel_l = image_w * 3;
+    while (pixel_l % 4 != 0)pixel_l++;
+    pixel_l *= image_h;
+    pixeldata = (GLubyte *) malloc(pixel_l);
+    if (pixeldata == nullptr) exit(0);
+    fseek(p_file, 54, SEEK_SET);
+    fread(pixeldata, pixel_l, 1, p_file);
+    p.push_back(pixeldata); // Similar to glDrawPixels for program 3
+    fclose(p_file);
 }
 
 void initDraw() {
@@ -84,6 +54,25 @@ void initDraw() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(30, 1.333333, 0.1, 1000);
+
+    int image_width, image_height, pixel_length;
+
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glShadeModel(GL_FLAT);
+    glEnable(GL_TEXTURE_2D);
+    ReadImage("../grass.bmp", image_width, image_height, pixel_length);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // set pixel storage modes (in the memory)
+    glGenTextures(1, &texture[0]); // number of texture names to be generated and an array of texture names
+    glBindTexture(GL_TEXTURE_2D, texture[0]); // target to which texture is bound and name of a texture
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, image_width, image_height, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, p[0]);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
 }
 
 void generateObjects() {
@@ -106,104 +95,28 @@ void generateMap() {
 }
 
 void drawMap() {
-    float gameZ = 0;
-    float gameX = 0;
-    // Enable and load textures
-    glEnable(GL_TEXTURE_2D);
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    textureGrass = loadBMP("../grass.bmp");
-    for (size_t i = 0; i < listOfRows.size(); i++) {
-        for (size_t j = 0; j < 16; j++) {
-            switch (listOfRows[i][j]) {
-                // Grass
-                case '0':
-                    glPushMatrix();
-                    glColor3f(190.0 / 255.0, 245.0 / 255.0, 102.0 / 255.0);
-                    glTranslatef((static_cast<int>(j) * 4), -6.8, (static_cast<int>(i) * 4));
-                    glScalef(1, .15, 1);
-                    glRotated(90, 1, 0, 0);
+    for (int i = 0; i < 7; i++) {
+        for (int j = 0; j < 11; j++) {
+            glPushMatrix();
+            glColor3f(190.0 / 255.0, 245.0 / 255.0, 102.0 / 255.0);
+            glTranslatef((float) (j * 4), -6.8, (float) (i * 4));
+            glScalef(1, .15, 1);
+            glRotated(90, 1, 0, 0);
 
-                    glBegin(GL_QUADS);
-                    glTexCoord2i(0, 0);
-                    glVertex2i(-2, -2);
-                    glTexCoord2i(0, 1);
-                    glVertex2i(-2, 2);
-                    glTexCoord2i(1, 1);
-                    glVertex2i(2, 2);
-                    glTexCoord2i(1, 0);
-                    glVertex2i(2, -2);
-                    glEnd();
-
-                    glPopMatrix();
-                    break;
-                    // Tree - large
-                case '1':
-
-                    glPushMatrix();
-                    glColor3f(190.0 / 255.0, 245.0 / 255.0, 102.0 / 255.0);
-                    glTranslatef((static_cast<int>(j) * 4), -6.8, (static_cast<int>(i) * 4));
-                    glScalef(1, .15, 1);
-                    glRotated(90, 1, 0, 0);
-                    glBegin(GL_QUADS);
-                    glTexCoord2i(0, 0);
-                    glVertex2i(-2, -2);
-                    glTexCoord2i(0, 1);
-                    glVertex2i(-2, 2);
-                    glTexCoord2i(1, 1);
-                    glVertex2i(2, 2);
-                    glTexCoord2i(1, 0);
-                    glVertex2i(2, -2);
-                    glEnd();
-                    glPopMatrix();
-
-                    glPushMatrix();
-                    glColor3f(142.0 / 255.0, 84.0 / 255.0, 80.0 / 255.0);
-                    glTranslatef((static_cast<int>(j) * 4), -5, (static_cast<int>(i) * 4));
-                    glScalef(1, 1, 1);
-                    glutSolidCube(2);
-                    glPopMatrix();
-
-                    glPushMatrix();
-                    glColor4f(183.0 / 255.0, 214.0 / 255.0, 33.0 / 255.0, 1.0f);
-                    glTranslatef((static_cast<int>(j) * 4), -1.8, (static_cast<int>(i) * 4));
-                    glScalef(.7, 1.25, .7);
-                    glutSolidCube(4);
-                    glPopMatrix();
-
-                    break;
-
-                    // Road
-                case '2':
-                    glPushMatrix();
-                    glColor3f(82.0 / 255.0, 88.0 / 255.0, 102.0 / 255.0);
-                    glTranslatef((static_cast<int>(j) * 4), -7, (static_cast<int>(i) * 4));
-                    glScalef(1, 0, 1);
-                    glutSolidCube(4);
-                    glPopMatrix();
-
-                    glPushMatrix();
-                    glColor3f(82.0 / 255.0, 88.0 / 255.0, 102.0 / 255.0);
-                    glTranslatef((static_cast<int>(j) * 4), -7, (static_cast<int>(i) * 4));
-                    glScalef(.5, .1, .08);
-                    glutSolidCube(4);
-                    glPopMatrix();
-                    break;
-
-                    // Water
-                case '3':
-                    glPushMatrix();
-                    glColor3f(128.0 / 255.0, 245.0 / 255.0, 255.0 / 255.0);
-                    glTranslatef((static_cast<int>(j) * 4), -7, (static_cast<int>(i) * 4));
-                    glScalef(1, 0, 1);
-                    glutSolidCube(4);
-                    glPopMatrix();
-
-                    break;
-
-            }
+            glBegin(GL_QUADS);
+            glTexCoord2i(0, 0);
+            glVertex2i(-2, -2);
+            glTexCoord2i(0, 1);
+            glVertex2i(-2, 2);
+            glTexCoord2i(1, 1);
+            glVertex2i(2, 2);
+            glTexCoord2i(1, 0);
+            glVertex2i(2, -2);
+            glEnd();
+            glLoadIdentity();
+            glPopMatrix();
         }
     }
-
 }
 
 void drawScene() {
@@ -213,8 +126,10 @@ void drawScene() {
     camera.update();
     gluLookAt(0, 0, -10, -10, 0, 0, 0, 1, 0);
 
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
     drawMap();
 
+    glBindTexture(GL_TEXTURE_2D, texture[1]);
     for (auto &it: snow) {
         it.draw();
     }
@@ -286,16 +201,16 @@ int main(int argc, char **argv) {
 
     glEnable(GL_DEPTH_TEST);
 
+    initDraw();
+    generateObjects();
+//    generateMap();
+
     glutDisplayFunc(drawScene);
     glutKeyboardFunc(keyboardHandler);
     glutReshapeFunc(reshape);
 //    glutPassiveMotionFunc(passiveMotionHandler);
     glutTimerFunc(1000 / 60, timerHandler, 0);
     glutIdleFunc(idle);
-
-    initDraw();
-    generateObjects();
-    generateMap();
 
     glutMainLoop();
     return 0;
