@@ -3,6 +3,7 @@
 std::vector<Snow> snow;
 std::vector<Rain> rain;
 Camera camera;
+
 int weather = 0;
 
 void generateObjects() {
@@ -62,6 +63,10 @@ void drawScene() {
         default:
             break;
     }
+
+    Building::draw();
+
+    Flag::draw();
 
     glFlush();
     glutSwapBuffers();

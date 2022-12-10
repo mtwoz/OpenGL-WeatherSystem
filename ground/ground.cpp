@@ -1,7 +1,6 @@
 #include "ground.h"
 
 void Ground::drawGrass() {
-    /*
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 11; j++) {
             glPushMatrix();
@@ -22,28 +21,6 @@ void Ground::drawGrass() {
             glLoadIdentity();
             glPopMatrix();
         }
-    }
-     */
-    for (int i = 0; i < 31; i++) {
-        for (int j = 0; j < 31; j++) {
-            glColor3fv(g_colors[i][j]);
-            glVertex3f(g_points[j][i][0],
-                       g_points[j][i][1],
-                       g_points[j][i][2]);
-            glColor3fv(g_colors[i][j]);
-            glVertex3f(g_points[j][i][0],
-                       g_points[j][i][1],
-                       g_points[j][i][2]);
-            glColor3fv(g_colors[i][j]);
-            glVertex3f(g_points[j][i][0],
-                       g_points[j][i][1],
-                       g_points[j][i][2]);
-            glColor3fv(g_colors[i][j]);
-            glVertex3f(g_points[j][i][0],
-                       g_points[j][i][1],
-                       g_points[j][i][2]);
-        }
-
     }
 }
 

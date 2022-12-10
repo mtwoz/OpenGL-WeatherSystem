@@ -49,6 +49,12 @@ void Rain::draw_drop() {
     glColor4f(this->color[0], this->color[1], this->color[2], this->color[3]);
     glBegin(GL_LINES);
     glVertex3f(this->position.x, this->position.y, this->position.z);
+    glVertex3f(this->position.x, this->position.y + 0.25f, this->position.z);
+    glEnd();
+
+    glColor4f(this->color[0], this->color[1], this->color[2], this->color[3] - 0.5f);
+    glBegin(GL_LINES);
+    glVertex3f(this->position.x, this->position.y + 0.25, this->position.z);
     glVertex3f(this->position.x, this->position.y + 0.5f, this->position.z);
     glEnd();
 }

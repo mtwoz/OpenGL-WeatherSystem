@@ -18,9 +18,9 @@ target_link_libraries(test ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} glut)
 add_executable(example example/example.cpp)
 target_link_libraries(example ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} glut)
 
-# Road
-add_executable(jumpyroad Road/main.cpp)
-target_link_libraries(jumpyroad ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} glut)
+# Flag_demo
+add_executable(flag example/Flag_demo/imageloader.cpp example/Flag_demo/IndianFlag.cpp)
+target_link_libraries(flag ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} glut)
 
 # Assessment 2
 file(GLOB srcfiles "*.cpp" "*/*.cpp")
@@ -32,4 +32,7 @@ target_link_libraries(weather ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} glut)
 include_directories(${PROJECT_SOURCE_DIR}/utilities)
 include_directories(${PROJECT_SOURCE_DIR}/snow)
 include_directories(${PROJECT_SOURCE_DIR}/rain)
+include_directories(${PROJECT_SOURCE_DIR}/flag)
+include_directories(${PROJECT_SOURCE_DIR}/ground)
+include_directories(${PROJECT_SOURCE_DIR}/building)
 include_directories(${PROJECT_SOURCE_DIR}/camera)

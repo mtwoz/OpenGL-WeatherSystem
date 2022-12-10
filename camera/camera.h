@@ -3,6 +3,8 @@
 
 #include "utilities.h"
 
+#define DEG_TO_RAD 0.01745329
+
 #define Z_NEAR_MIN 3.0f
 #define Z_NEAR_MAX 3.9f
 #define Z_NEAR_STEP 0.01f

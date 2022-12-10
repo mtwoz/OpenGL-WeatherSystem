@@ -12,9 +12,9 @@ public:
 
     ~Ground() = default;
 
-    void drawGrass();
+    static void drawGrass();
 
-    void drawRunway();
+    static void drawRunway();
 
 private:
 };
