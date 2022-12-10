@@ -3,20 +3,20 @@
 #include "vec3.h"
 #include "utilities.h"
 
-#define DAMPING 0.01
-#define TIME_STEPSIZE2 (0.5*0.5)
+#define DAMPING 0.02
+#define TIME2 (0.5*0.5)
 #define SPRING_ITERATIONS 15
 
 class Particle {
 public:
-    explicit Particle(Vec3 po);
+    explicit Particle(Vec3 pos_);
 
     Particle() = default;
 
-    void addForce(Vec3 f);
+    void addForce(Vec3 force);
 
     //Verlet integration
-    void timeStep();
+    void update();
 
     Vec3 &getPos();
 
@@ -32,22 +32,21 @@ public:
     void resetNormal();
 
 private:
-    bool movable{}; //Used to fix points on the cloth
+    bool movable{};
 
-    float mass{};   // Particle of each particle
-    Vec3 pos;     // Current position
-    Vec3 old_pos; // Previous position
-    Vec3 acceleration; // Acceleration due to forces acting
-    Vec3 accumulated_normal; // Non-normalized
+    float mass{};
+    Vec3 pos;
+    Vec3 pre_pos;
+    Vec3 acceleration;
+    Vec3 accumulated_normal;
 };
 
 class Spring {
 public:
     Particle *p1, *p2;
 
-    Spring(Particle *pi, Particle *pj);
+    Spring(Particle *p1_, Particle *p2_);
 
-    //Calculating constraint between 2 particles, and offset
     void satisfySpring() const;
 
 private:
@@ -57,22 +56,22 @@ private:
 class Cloth {
 public:
 
-    Cloth(float w, float h, int num_particles_w, int num_particles_h);
+    Cloth(float w, float h, int particles_w, int particles_h);
 
     //Colored in the form of a triangular mesh
-    void drawShaded();
+    void draw();
 
     //Function that progresses timestep
-    void timeStep();
+    void update();
 
     //Add gravitational force
     void addForce(Vec3 direction);
 
-    void windForce(Vec3 direction);
+    void addWindForce(Vec3 direction);
 
 private:
-    int num_particles_width;
-    int num_particles_height;
+    int num_particles_w;
+    int num_particles_h;
 
     std::vector<Particle> particles;
     std::vector<Spring> springs;
@@ -85,7 +84,7 @@ private:
     static Vec3 calcNormal(Particle *p1, Particle *p2, Particle *p3);
 
     //Calc wind force acting a triangle of particles
-    static void addForces3D(Particle *p1, Particle *p2, Particle *p3, const Vec3 direction);
+    static void addForces3D(Particle *p1, Particle *p2, Particle *p3, Vec3 direction);
 
     //Draw the triangle. Called in drawShade() function
     static void drawTriangle(Particle *p1, Particle *p2, Particle *p3, Vec3 color);
@@ -98,6 +97,4 @@ public:
     ~Flag() = default;
 
     static void draw();
-
-private:
 };

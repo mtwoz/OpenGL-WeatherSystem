@@ -4,7 +4,7 @@
 
 class Texture {
 public:
-    uint texture[2];
+    uint texture[2]{};
 
     Texture() = default;
 
@@ -15,7 +15,6 @@ public:
     void loadTexture();
 
 private:
-    int image_width_grass, image_height_grass, pixel_length_grass;
-    int image_width_runway, image_height_runway, pixel_length_runway;
+    int image_width{}, image_height{}, pixel_length{};
     std::vector<GLubyte *> p;
 };

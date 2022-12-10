@@ -106,6 +106,17 @@ void keyboardHandler(unsigned char key, int x, int y) {
         (weather += 1) %= 2;
 }
 
+void specialKeyHandler(int key, int x, int y) {
+    if (key == GLUT_KEY_UP)
+        camera.rotateUp();
+    else if (key == GLUT_KEY_DOWN)
+        camera.rotateDown();
+    else if (key == GLUT_KEY_LEFT)
+        camera.rotateLeft();
+    else if (key == GLUT_KEY_RIGHT)
+        camera.rotateRight();
+}
+
 void idle() {
     glutPostRedisplay();
 }
@@ -120,6 +131,7 @@ int main(int argc, char **argv) {
     initDraw();
     glutDisplayFunc(drawScene);
     glutKeyboardFunc(keyboardHandler);
+    glutSpecialFunc(specialKeyHandler);
     glutReshapeFunc(reshape);
     glutIdleFunc(idle);
 

@@ -73,7 +73,7 @@ void Rain::draw_ripple() {
         glEnd();
     }
 
-    glColor4f(this->color[0], this->color[1], this->color[2], this->color[3] + 0.5);
+    glColor4f(this->color[0], this->color[1], this->color[2], this->color[3] + 0.5f);
     if (this->radius >= 0.8 && this->radius <= 2.0) {
         glBegin(GL_POINTS);
         for (float i = -M_PI; i <= M_PI; i += 0.001)

@@ -51,21 +51,37 @@ void Camera::moveBackward() {
     this->eye_z -= (float) cos(lon * DEG_TO_RAD) * EYE_STEP;
 }
 
+void Camera::moveLeft() {
+    this->eye_z += EYE_STEP;
+}
+
+void Camera::moveRight() {
+    this->eye_z -= EYE_STEP;
+}
+
 void Camera::moveUp() {
+    this->eye_y -= EYE_STEP;
+}
+
+void Camera::moveDown() {
+    this->eye_y += EYE_STEP;
+}
+
+void Camera::rotateUp() {
     if (this->lat + this->m_lat + TURN_ANGLE < 90)
         this->lat += TURN_ANGLE;
 }
 
-void Camera::moveDown() {
+void Camera::rotateDown() {
     if (this->lat + this->m_lat - TURN_ANGLE > -90)
         this->lat -= TURN_ANGLE;
 }
 
-void Camera::moveLeft() {
+void Camera::rotateLeft() {
     this->lon += TURN_ANGLE;
 }
 
-void Camera::moveRight() {
+void Camera::rotateRight() {
     this->lon -= TURN_ANGLE;
 }
 

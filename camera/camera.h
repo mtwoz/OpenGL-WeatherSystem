@@ -38,13 +38,21 @@ public:
 
     void moveBackward();
 
+    void moveLeft();
+
+    void moveRight();
+
     void moveUp();
 
     void moveDown();
 
-    void moveLeft();
+    void rotateUp();
 
-    void moveRight();
+    void rotateDown();
+
+    void rotateLeft();
+
+    void rotateRight();
 
     void rotate(int dx, int dy);
 
