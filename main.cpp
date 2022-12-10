@@ -1,13 +1,17 @@
 #include "main.h"
 
 std::vector<Snow> snow;
+std::vector<Rain> rain;
 Camera camera;
-Ground ground;
-Texture texture;
+int weather = 0;
 
 void generateObjects() {
     for (int i = 0; i <= SNOW_COUNT; i++) {
         snow.emplace_back();
+    }
+
+    for (int i = 0; i <= RAIN_COUNT; i++) {
+        rain.emplace_back();
     }
 }
 
@@ -34,7 +38,6 @@ void initDraw() {
     glLoadIdentity();
     gluPerspective(30, 1.333333, 0.1, 1000);
 
-    texture.loadTexture();
     generateObjects();
 }
 
@@ -45,13 +48,19 @@ void drawScene() {
     camera.update();
     gluLookAt(22, 0, -20, 0, 0, -14, 0, 1, 0);
 
-
-    glBindTexture(GL_TEXTURE_2D, texture.texture[0]);
-    ground.drawGrass();
-
-    glBindTexture(GL_TEXTURE_2D, texture.texture[1]);
-    for (auto &it: snow) {
-        it.draw();
+    switch (weather) {
+        case SNOW:
+            for (auto &it: snow) {
+                it.draw();
+            }
+            break;
+        case RAIN:
+            for (auto &it: rain) {
+                it.draw();
+            }
+            break;
+        default:
+            break;
     }
 
     glFlush();
@@ -88,6 +97,8 @@ void keyboardHandler(unsigned char key, int x, int y) {
         camera.moveUp();
     else if (key == 'x' || key == 'X')
         camera.moveDown();
+    else if (key == 't' || key == 'T')
+        (weather += 1) %= 2;
 }
 
 void idle() {

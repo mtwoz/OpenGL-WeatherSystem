@@ -6,8 +6,8 @@
 #include <iostream>
 
 #include "snow.h"
+#include "rain.h"
 #include "camera.h"
-#include "ground.h"
-#include "texture.h"
 
-#define MAX_PARTICLES 1000
+#define SNOW 0
+#define RAIN 1

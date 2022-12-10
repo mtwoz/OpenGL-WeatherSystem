@@ -2,17 +2,25 @@
 
 #include "utilities.h"
 
-#define SNOW_COUNT 1000
+#define RAIN_COUNT 1000
+#define TWO_PI (2*M_PI)
 
-class Snow {
+
+class Rain {
 public:
-    Snow();
+    Rain();
 
-    ~Snow() = default;
+    ~Rain() = default;
 
-    void update();
+    void update_ground();
+
+    void update_sky();
 
     void draw();
+
+    void draw_drop();
+
+    void draw_ripple();
 
 private:
     Point position{};
@@ -22,8 +30,7 @@ private:
     float fade;
     float vel;
     float gravity;
-    float motion_x;
-    float motion_z;
+    float radius;
 
     bool on_ground;
 
