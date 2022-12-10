@@ -2,6 +2,7 @@
 
 #include <ctime>
 #include <random>
+#include <iostream>
 #include <GL/glut.h>
 
 #define WIDTH 1280

@@ -52,11 +52,13 @@ void Camera::moveBackward() {
 }
 
 void Camera::moveUp() {
-    this->eye_y += EYE_Y_STEP;
+    if (this->lat + this->m_lat + TURN_ANGLE < 90)
+        this->lat += TURN_ANGLE;
 }
 
 void Camera::moveDown() {
-    this->eye_y -= EYE_Y_STEP;
+    if (this->lat + this->m_lat - TURN_ANGLE > -90)
+        this->lat -= TURN_ANGLE;
 }
 
 void Camera::moveLeft() {
