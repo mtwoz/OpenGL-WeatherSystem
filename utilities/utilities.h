@@ -8,6 +8,9 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
+extern float wind_velocity_x;
+extern float wind_velocity_z;
+
 // store points
 typedef struct {
     GLfloat x, y, z;

@@ -104,6 +104,14 @@ void keyboardHandler(unsigned char key, int x, int y) {
         camera.moveDown();
     else if (key == 't' || key == 'T')
         (weather += 1) %= 2;
+    else if (key == 'h' || key == 'H')
+        wind_velocity_x += 0.1;
+    else if (key == 'j' || key == 'J')
+        wind_velocity_x -= 0.1;
+    else if (key == 'k' || key == 'K')
+        wind_velocity_z += 0.1;
+    else if (key == 'l' || key == 'L')
+        wind_velocity_z -= 0.1;
 }
 
 void specialKeyHandler(int key, int x, int y) {

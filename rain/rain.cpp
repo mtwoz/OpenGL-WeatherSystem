@@ -2,7 +2,7 @@
 
 Rain::Rain() {
     this->position = Point{randomFloat(randomFloat(-5, 5), randomFloat(40, 50)),
-                           25.0,
+                           randomFloat(25, 30),
                            randomFloat(randomFloat(-5, 5), randomFloat(25, 35))};
 
     this->color[0] = 0.5;
@@ -10,7 +10,7 @@ Rain::Rain() {
     this->color[2] = 1.0;
     this->color[3] = randomFloat(0.1, 1.0);
 
-    this->vel = 0.0;
+    this->vel = randomFloat(-0.2, 0.0);
     this->life = 1.0;
     this->gravity = -0.0005;
     this->fade = randomFloat(0.001, 0.05);
@@ -19,15 +19,15 @@ Rain::Rain() {
 }
 
 void Rain::reset() {
-    this->position = Point{randomFloat(0, 44),
-                           25.0,
-                           randomFloat(0, 28)};
+    this->position = Point{randomFloat(randomFloat(-5, 5), randomFloat(40, 50)),
+                           randomFloat(25, 30),
+                           randomFloat(randomFloat(-5, 5), randomFloat(25, 35))};
     this->color[0] = 0.5;
     this->color[1] = 0.5;
     this->color[2] = 1.0;
     this->color[3] = randomFloat(0.1, 1.0);
 
-    this->vel = 0.0;
+    this->vel = randomFloat(-0.2, 0.0);
     this->life = 1.0;
     this->gravity = -0.0005;
     this->fade = randomFloat(0.001, 0.05);
@@ -46,20 +46,28 @@ void Rain::draw() {
 }
 
 void Rain::draw_drop() {
+    glPushMatrix();
+    glLineWidth(1);
     glColor4f(this->color[0], this->color[1], this->color[2], this->color[3]);
     glBegin(GL_LINES);
     glVertex3f(this->position.x, this->position.y, this->position.z);
     glVertex3f(this->position.x, this->position.y + 0.25f, this->position.z);
     glEnd();
 
+    glLineWidth(0.5);
     glColor4f(this->color[0], this->color[1], this->color[2], this->color[3] - 0.5f);
     glBegin(GL_LINES);
-    glVertex3f(this->position.x, this->position.y + 0.25, this->position.z);
+    glVertex3f(this->position.x, this->position.y + 0.25f, this->position.z);
     glVertex3f(this->position.x, this->position.y + 0.5f, this->position.z);
     glEnd();
+    glPopMatrix();
 }
 
 void Rain::draw_ripple() {
+    if (this->position.x >= 20 && this->position.x <= 25 && this->position.z >= 9 && this->position.z <= 16) {
+        return;
+    }
+
     glPushMatrix();
 
     glTranslatef(this->position.x, this->position.y, this->position.z);
@@ -68,7 +76,7 @@ void Rain::draw_ripple() {
 
     if (this->radius <= 1.2) {
         glBegin(GL_POINTS);
-        for (float i = -M_PI; i <= M_PI; i += 0.001)
+        for (float i = 0; i <= TWO_PI; i += 0.05)
             glVertex2f((sinf(i) * this->radius), (cosf(i) * this->radius));
         glEnd();
     }
@@ -76,12 +84,11 @@ void Rain::draw_ripple() {
     glColor4f(this->color[0], this->color[1], this->color[2], this->color[3] + 0.5f);
     if (this->radius >= 0.8 && this->radius <= 2.0) {
         glBegin(GL_POINTS);
-        for (float i = -M_PI; i <= M_PI; i += 0.001)
+        for (float i = 0; i <= TWO_PI; i += 0.05)
             glVertex2f((sinf(i) * (this->radius - 1)), (cosf(i) * (this->radius - 1)));
         glEnd();
     }
 
-    glLoadIdentity();
     glPopMatrix();
 }
 
@@ -103,7 +110,7 @@ void Rain::update_ground() {
     this->radius += 0.01;
     this->color[3] -= 0.005;
 
-    if (this->radius >= 2.0) {
+    if (this->radius >= 2.0 || this->color[3] <= -0.5) {
         this->reset();
     }
 }

@@ -17,9 +17,9 @@ void Particle::addForce(Vec3 force) {
 
 void Particle::update() {
     if (this->movable) {
-        Vec3 temp = this->pos;
-        this->pos = this->pos + (this->pos - this->pre_pos) * (1.0 - DAMPING) + this->acceleration * TIME2;
-        this->pre_pos = temp;
+        Vec3 pos_ = this->pos;
+        this->pos = this->pos + (this->pos - this->pre_pos) * (1.0 - Resistance) + this->acceleration * TIME2;
+        this->pre_pos = pos_;
         this->acceleration = Vec3(0, 0, 0);
     }
 }
@@ -28,9 +28,9 @@ Vec3 &Particle::getPos() {
     return this->pos;
 }
 
-void Particle::offsetPos(const Vec3 v) {
+void Particle::offsetPos(const Vec3 vec) {
     if (this->movable) {
-        this->pos += v;
+        this->pos += vec;
     }
 }
 
@@ -136,19 +136,6 @@ void Cloth::draw() {
             this->getParticle(x + 1, y + 1)->addToNormal(normal);
             this->getParticle(x + 1, y)->addToNormal(normal);
             this->getParticle(x, y + 1)->addToNormal(normal);
-
-            if (x == 0 && y == 0) {
-                glTexCoord2i(0, 0);
-            }
-            if (x == this->num_particles_w - 2 && y == 0) {
-                glTexCoord2i(1, 0);
-            }
-            if (x == this->num_particles_w - 2 && y == this->num_particles_h - 2) {
-                glTexCoord2i(1, 1);
-            }
-            if (x == 0 && y == this->num_particles_h - 2) {
-                glTexCoord2i(0, 1);
-            }
         }
     }
 
@@ -170,18 +157,18 @@ void Cloth::update() {
     // iterate over all springs several times
     for (int i = 0; i < SPRING_ITERATIONS; i++) {
         for (auto &spring: this->springs) {
-            spring.satisfySpring(); // satisfy constraint.
+            spring.satisfySpring();
         }
     }
 
     for (auto &particle: this->particles) {
-        particle.update(); // calculate the position of each particle at the next time step.
+        particle.update();
     }
 }
 
 void Cloth::addForce(const Vec3 direction) {
     for (auto &particle: this->particles) {
-        particle.addForce(direction); // add the forces to each particle
+        particle.addForce(direction);
     }
 }
 
@@ -241,11 +228,12 @@ void Cloth::drawTriangle(Particle *p1, Particle *p2, Particle *p3, const Vec3 co
 }
 
 void Flag::draw() {
-    cloth.addWindForce(Vec3(0.5, 0.1, 0.2) * TIME2);
+    cloth.addWindForce(Vec3(0.01, 0.01, 0.01) * TIME2);
     cloth.update();
 
     glPushMatrix();
     glTranslatef(22.52, 10, 12.955);
+    glRotatef(190.0f, 0.0f, 1.0f, 0.0f);
     glScaled(0.2, 0.2, 0.2);
     cloth.draw();
 

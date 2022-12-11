@@ -8,7 +8,7 @@ void Building::draw() {
     glScaled(4.0f, 4.0f, 4.0f);
 
     // Floor
-    glColor3f(0.2, 0.2, 0.2);
+    glColor3f(0.55, 0.19, 0.07);
     glPushMatrix();
     glTranslatef(0, -0.7, 0.8);
     glScalef(0.8, 0.15, 0.8);
@@ -33,7 +33,7 @@ void Building::draw() {
     glColor3f(0.8, 0.8, 0.8);
     glPushMatrix();
     glRotated(90, 0, 1, 0);
-    glTranslatef(-0.55, 0.8, 0);
+    glTranslatef(-0.5, 0.8, 0);
     glScalef(0.1, 3, 0.5);
     glutSolidCube(1);
     glPopMatrix();
@@ -41,7 +41,7 @@ void Building::draw() {
     glColor3f(0.8, 0.8, 0.8);
     glPushMatrix();
     glRotated(90, 0, 1, 0);
-    glTranslatef(-1.06, 0.8, 0);
+    glTranslatef(-1.1, 0.8, 0);
     glScalef(0.1, 3, 0.5);
     glutSolidCube(1);
     glPopMatrix();

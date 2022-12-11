@@ -2,6 +2,9 @@
 
 using namespace std;
 
+float wind_velocity_x = 0;
+float wind_velocity_z = 0;
+
 // random number generators with type int
 int randomInt(int min, int max) {
     random_device device;
