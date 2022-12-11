@@ -31,6 +31,8 @@ private:
     float vel;
     float gravity;
     float radius;
+    float motion_x;
+    float motion_z;
 
     bool on_ground;
 

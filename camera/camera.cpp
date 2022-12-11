@@ -18,6 +18,9 @@ Camera::Camera() {
 
     this->lat = 0.0f;
     this->lon = 255.0f;
+    this->m_lat = 0.0f;
+    this->m_lon = 0.0f;
+
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -25,9 +28,9 @@ Camera::Camera() {
 }
 
 void Camera::update() {
-    this->center_x = this->eye_x + (float) (cos((lat + m_lat) * DEG_TO_RAD) * sin((lon + m_lon) * DEG_TO_RAD));
-    this->center_y = this->eye_y + (float) (sin((lat + m_lat) * DEG_TO_RAD));
-    this->center_z = this->eye_z + (float) (cos((lat + m_lat) * DEG_TO_RAD) * cos((lon + m_lon) * DEG_TO_RAD));
+    this->center_x = this->eye_x + (float) (cosf((lat + m_lat) * DEG2RAD) * sinf((lon + m_lon) * DEG2RAD));
+    this->center_y = this->eye_y + (float) (sinf((lat + m_lat) * DEG2RAD));
+    this->center_z = this->eye_z + (float) (cosf((lat + m_lat) * DEG2RAD) * cosf((lon + m_lon) * DEG2RAD));
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -40,15 +43,15 @@ void Camera::update() {
 }
 
 void Camera::moveForward() {
-    this->eye_x += (float) sin(lon * DEG_TO_RAD) * EYE_STEP;
-    this->eye_y += (float) sin(lat * DEG_TO_RAD) * EYE_STEP;
-    this->eye_z += (float) cos(lon * DEG_TO_RAD) * EYE_STEP;
+    this->eye_x += (float) sinf(lon * DEG2RAD) * EYE_STEP;
+    this->eye_y += (float) sinf(lat * DEG2RAD) * EYE_STEP;
+    this->eye_z += (float) cosf(lon * DEG2RAD) * EYE_STEP;
 }
 
 void Camera::moveBackward() {
-    this->eye_x -= (float) sin(lon * DEG_TO_RAD) * EYE_STEP;
-    this->eye_y -= (float) sin(lat * DEG_TO_RAD) * EYE_STEP;
-    this->eye_z -= (float) cos(lon * DEG_TO_RAD) * EYE_STEP;
+    this->eye_x -= (float) sinf(lon * DEG2RAD) * EYE_STEP;
+    this->eye_y -= (float) sinf(lat * DEG2RAD) * EYE_STEP;
+    this->eye_z -= (float) cosf(lon * DEG2RAD) * EYE_STEP;
 }
 
 void Camera::moveLeft() {
@@ -83,7 +86,4 @@ void Camera::rotateLeft() {
 
 void Camera::rotateRight() {
     this->lon -= TURN_ANGLE;
-}
-
-void Camera::rotate(int dx, int dy) {
 }

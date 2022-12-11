@@ -233,7 +233,7 @@ void Flag::draw() {
 
     glPushMatrix();
     glTranslatef(22.52, 10, 12.955);
-    glRotatef(190.0f, 0.0f, 1.0f, 0.0f);
+    glRotatef((float)flag_angle, 0.0f, 1.0f, 0.0f);
     glScaled(0.2, 0.2, 0.2);
     cloth.draw();
 

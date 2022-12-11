@@ -10,11 +10,13 @@ Rain::Rain() {
     this->color[2] = 1.0;
     this->color[3] = randomFloat(0.1, 1.0);
 
-    this->vel = randomFloat(-0.2, 0.0);
+    this->radius = 0;
     this->life = 1.0;
     this->gravity = -0.0005;
+    this->vel = randomFloat(-0.2, 0.0);
     this->fade = randomFloat(0.001, 0.05);
-    this->radius = 0;
+    this->motion_x = randomFloat(-0.01, 0.01);
+    this->motion_z = randomFloat(-0.01, 0.01);
     this->on_ground = false;
 }
 
@@ -27,12 +29,16 @@ void Rain::reset() {
     this->color[2] = 1.0;
     this->color[3] = randomFloat(0.1, 1.0);
 
-    this->vel = randomFloat(-0.2, 0.0);
+    this->radius = 0;
     this->life = 1.0;
     this->gravity = -0.0005;
-    this->fade = randomFloat(0.001, 0.05);
-    this->radius = 0;
     this->on_ground = false;
+
+    this->vel = randomFloat(-0.2, 0.0);
+    this->fade = randomFloat(0.001, 0.05);
+    this->motion_x = randomFloat(-0.005, 0.005) + wind_velocity_x;
+    this->motion_z = randomFloat(-0.005, 0.005) + wind_velocity_z;
+
 }
 
 void Rain::draw() {
@@ -98,6 +104,8 @@ void Rain::update_sky() {
     }
 
     this->position.y += this->vel;
+    this->position.x += this->motion_x;
+    this->position.z += this->motion_z;
     this->vel += this->gravity;
     this->life -= this->fade;
 

@@ -5,6 +5,7 @@ std::vector<Rain> rain;
 Camera camera;
 
 int weather = 0;
+bool wind_on = false;
 
 void generateObjects() {
     for (int i = 0; i <= SNOW_COUNT; i++) {
@@ -48,6 +49,11 @@ void drawScene() {
     glLoadIdentity();
     camera.update();
     gluLookAt(22, 0, -20, 0, 0, -14, 0, 1, 0);
+
+    if (wind_on) {
+        wind_velocity_x = cosf((float) flag_angle * DEG2RAD) * 0.05f * 1;
+        wind_velocity_z = sinf((float) flag_angle * DEG2RAD) * 0.05f * -1;
+    }
 
     switch (weather) {
         case SNOW:
@@ -104,14 +110,13 @@ void keyboardHandler(unsigned char key, int x, int y) {
         camera.moveDown();
     else if (key == 't' || key == 'T')
         (weather += 1) %= 2;
-    else if (key == 'h' || key == 'H')
-        wind_velocity_x += 0.1;
-    else if (key == 'j' || key == 'J')
-        wind_velocity_x -= 0.1;
-    else if (key == 'k' || key == 'K')
-        wind_velocity_z += 0.1;
-    else if (key == 'l' || key == 'L')
-        wind_velocity_z -= 0.1;
+    else if (key == 'j' || key == 'J') {
+        (flag_angle += FLAG_ANGLE_STEP) %= FLAG_ANGLE_MAX;
+        wind_on = true;
+    } else if (key == 'k' || key == 'K') {
+        flag_angle -= FLAG_ANGLE_STEP;
+        wind_on = true;
+    }
 }
 
 void specialKeyHandler(int key, int x, int y) {

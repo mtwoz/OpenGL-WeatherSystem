@@ -39,21 +39,11 @@ void Snow::reset() {
     this->vel = 0.0;
     this->life = 1.0;
     this->gravity = -0.0005;
-    this->fade = randomFloat(0.001, 0.05);
     this->on_ground = false;
 
-    if (randomBool())
-        motion_x = -randomFloat(0, 0.05);
-    else
-        motion_x = randomFloat(0, 0.05);
-
-    if (randomBool())
-        motion_z = -randomFloat(0, 0.05);
-    else
-        motion_z = randomFloat(0, 0.05);
-
-//    motion_x = wind_velocity_x;
-//    motion_z = wind_velocity_z;
+    this->fade = randomFloat(0.001, 0.05);
+    this->motion_x = randomFloat(-0.05, 0.05) + wind_velocity_x;
+    this->motion_z = randomFloat(-0.05, 0.05) + wind_velocity_z;
 }
 
 void Snow::draw() {
@@ -82,7 +72,7 @@ void Snow::update() {
         this->position.x += this->motion_x;
         this->position.z += this->motion_z;
         this->vel += this->gravity;
-        if (this->life < 0.0) {
+        if (this->life <= 0.0) {
             this->reset();
         }
     }
