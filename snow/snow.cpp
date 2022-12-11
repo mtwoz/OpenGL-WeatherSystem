@@ -50,7 +50,7 @@ void Snow::draw() {
     glColor4f(this->color[0], this->color[1], this->color[2], this->color[3]);
     glPushMatrix();
     glTranslatef(this->position.x, this->position.y, this->position.z);
-    glutSolidSphere(0.05, 16, 16);
+    glutSolidSphere(0.08, 16, 16);
     glPopMatrix();
 
     this->update();

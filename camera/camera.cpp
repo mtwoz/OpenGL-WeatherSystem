@@ -7,8 +7,9 @@ Camera::Camera() {
     this->z_far = 100.0f;
 
     this->eye_x = 0.0f;
-    this->eye_y = -0.2f;
-    this->eye_z = 1.5f;
+    this->eye_y = 0.0f;
+    this->eye_z = 0.0f;
+
     this->center_x = 0.0f;
     this->center_y = 0.0f;
     this->center_z = 0.0f;
@@ -21,6 +22,11 @@ Camera::Camera() {
     this->m_lat = 0.0f;
     this->m_lon = 0.0f;
 
+    for(int i = 1; i <= 200; i++) {
+        this->moveBackward();
+    }
+
+    std::cout << this->eye_x << std::endl;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

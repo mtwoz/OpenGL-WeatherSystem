@@ -7,6 +7,9 @@ Camera camera;
 int weather = 0;
 bool wind_on = false;
 
+int prologue_timer = 200;
+bool journey_on = false;
+
 void generateObjects() {
     for (int i = 0; i <= SNOW_COUNT; i++) {
         snow.emplace_back();
@@ -15,6 +18,40 @@ void generateObjects() {
     for (int i = 0; i <= RAIN_COUNT; i++) {
         rain.emplace_back();
     }
+}
+
+void welcome() {
+    int matrixMode;
+    glGetIntegerv(GL_MATRIX_MODE, &matrixMode);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+
+    glLoadIdentity();
+    gluOrtho2D(0.0, 1.0, 0.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+
+    glLoadIdentity();
+    glColor3f(1.0, 1.0, 1.0);
+    int window_w = glutGet(GLUT_WINDOW_WIDTH);
+    int window_h = glutGet(GLUT_WINDOW_HEIGHT);
+    float text_x = (((float) window_w - 355) / 2) / (float) window_w;
+    float text_y = (((float) window_h - 24) / 2) / (float) window_h / 2;
+
+
+    glRasterPos3f(text_x, text_y, 0.0);
+    for (char i: "Please press P to start your journey") {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, i);
+    }
+
+    printf("%d %d\n", window_w, window_h);
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+
+    glPopMatrix();
+    glMatrixMode(matrixMode);
 }
 
 void initDraw() {
@@ -49,6 +86,15 @@ void drawScene() {
     glLoadIdentity();
     camera.update();
     gluLookAt(22, 0, -20, 0, 0, -14, 0, 1, 0);
+
+    if (!journey_on) {
+        welcome();
+    } else {
+        if (prologue_timer) {
+            camera.moveForward();
+            prologue_timer--;
+        }
+    }
 
     if (wind_on) {
         wind_velocity_x = cosf((float) flag_angle * DEG2RAD) * 0.05f * 1;
@@ -94,40 +140,49 @@ void reshape(int w, int h) {
 }
 
 void keyboardHandler(unsigned char key, int x, int y) {
-    if (key == 'q' || key == 'Q')
-        exit(0);
-    else if (key == 'w' || key == 'W')
-        camera.moveForward();
-    else if (key == 's' || key == 'S')
-        camera.moveBackward();
-    else if (key == 'a' || key == 'A')
-        camera.moveLeft();
-    else if (key == 'd' || key == 'D')
-        camera.moveRight();
-    else if (key == 'z' || key == 'Z')
-        camera.moveUp();
-    else if (key == 'x' || key == 'X')
-        camera.moveDown();
-    else if (key == 't' || key == 'T')
-        (weather += 1) %= 2;
-    else if (key == 'j' || key == 'J') {
-        (flag_angle += FLAG_ANGLE_STEP) %= FLAG_ANGLE_MAX;
-        wind_on = true;
-    } else if (key == 'k' || key == 'K') {
-        flag_angle -= FLAG_ANGLE_STEP;
-        wind_on = true;
+    if (!journey_on) {
+        if (key == 'p' || key == 'P') {
+            journey_on = true;
+        } else if (key == 't' || key == 'T')
+            (weather += 1) %= 2;
+    } else {
+        if (key == 'q' || key == 'Q')
+            exit(0);
+        else if (key == 'w' || key == 'W')
+            camera.moveForward();
+        else if (key == 's' || key == 'S')
+            camera.moveBackward();
+        else if (key == 'a' || key == 'A')
+            camera.moveLeft();
+        else if (key == 'd' || key == 'D')
+            camera.moveRight();
+        else if (key == 'z' || key == 'Z')
+            camera.moveUp();
+        else if (key == 'x' || key == 'X')
+            camera.moveDown();
+        else if (key == 't' || key == 'T')
+            (weather += 1) %= 2;
+        else if (key == 'j' || key == 'J') {
+            (flag_angle += FLAG_ANGLE_STEP) %= FLAG_ANGLE_MAX;
+            wind_on = true;
+        } else if (key == 'k' || key == 'K') {
+            flag_angle -= FLAG_ANGLE_STEP;
+            wind_on = true;
+        }
     }
 }
 
 void specialKeyHandler(int key, int x, int y) {
-    if (key == GLUT_KEY_UP)
-        camera.rotateUp();
-    else if (key == GLUT_KEY_DOWN)
-        camera.rotateDown();
-    else if (key == GLUT_KEY_LEFT)
-        camera.rotateLeft();
-    else if (key == GLUT_KEY_RIGHT)
-        camera.rotateRight();
+    if (journey_on) {
+        if (key == GLUT_KEY_UP)
+            camera.rotateUp();
+        else if (key == GLUT_KEY_DOWN)
+            camera.rotateDown();
+        else if (key == GLUT_KEY_LEFT)
+            camera.rotateLeft();
+        else if (key == GLUT_KEY_RIGHT)
+            camera.rotateRight();
+    }
 }
 
 void idle() {
