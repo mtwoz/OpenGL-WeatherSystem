@@ -22,7 +22,7 @@ Camera::Camera() {
     this->m_lat = 0.0f;
     this->m_lon = 0.0f;
 
-    for(int i = 1; i <= 200; i++) {
+    for(int i = 1; i <= 100; i++) {
         this->moveBackward();
     }
 

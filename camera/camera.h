@@ -3,7 +3,7 @@
 
 #include "utilities.h"
 
-#define EYE_STEP 0.3f
+#define EYE_STEP 0.5f
 #define TURN_ANGLE 4.0
 
 class Camera {

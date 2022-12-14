@@ -8,7 +8,7 @@ Camera camera;
 int weather = 0;
 bool wind_on = false;
 
-int prologue_timer = 200;
+int prologue_timer = 80;
 bool journey_on = false;
 
 void generateObjects() {
