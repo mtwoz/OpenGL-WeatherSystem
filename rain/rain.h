@@ -12,9 +12,9 @@ public:
 
     ~Rain() = default;
 
-    void update_ground();
-
     void update_sky();
+
+    void update_ground();
 
     void draw();
 

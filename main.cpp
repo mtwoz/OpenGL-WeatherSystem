@@ -2,6 +2,7 @@
 
 std::vector<Snow> snow;
 std::vector<Rain> rain;
+std::vector<Hail> hail;
 Camera camera;
 
 int weather = 0;
@@ -17,6 +18,10 @@ void generateObjects() {
 
     for (int i = 0; i <= RAIN_COUNT; i++) {
         rain.emplace_back();
+    }
+
+    for (int i = 0; i <= HAIL_COUNT; i++) {
+        hail.emplace_back();
     }
 }
 
@@ -44,8 +49,6 @@ void welcome() {
     for (char i: "Please press P to start your journey") {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, i);
     }
-
-    printf("%d %d\n", window_w, window_h);
 
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
@@ -112,6 +115,11 @@ void drawScene() {
                 it.draw();
             }
             break;
+        case HAIL:
+            for (auto &it: hail) {
+                it.draw();
+            }
+            break;
         default:
             break;
     }
@@ -144,7 +152,7 @@ void keyboardHandler(unsigned char key, int x, int y) {
         if (key == 'p' || key == 'P') {
             journey_on = true;
         } else if (key == 't' || key == 'T')
-            (weather += 1) %= 2;
+            (weather += 1) %= 3;
     } else {
         if (key == 'q' || key == 'Q')
             exit(0);
@@ -161,7 +169,7 @@ void keyboardHandler(unsigned char key, int x, int y) {
         else if (key == 'x' || key == 'X')
             camera.moveDown();
         else if (key == 't' || key == 'T')
-            (weather += 1) %= 2;
+            (weather += 1) %= 3;
         else if (key == 'j' || key == 'J') {
             (flag_angle += FLAG_ANGLE_STEP) %= FLAG_ANGLE_MAX;
             wind_on = true;

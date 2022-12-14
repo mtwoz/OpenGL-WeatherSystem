@@ -26,8 +26,6 @@ Camera::Camera() {
         this->moveBackward();
     }
 
-    std::cout << this->eye_x << std::endl;
-
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(this->fovy, this->aspect, this->z_near, this->z_far);

@@ -38,7 +38,6 @@ void Rain::reset() {
     this->fade = randomFloat(0.001, 0.05);
     this->motion_x = randomFloat(-0.005, 0.005) + wind_velocity_x;
     this->motion_z = randomFloat(-0.005, 0.005) + wind_velocity_z;
-
 }
 
 void Rain::draw() {

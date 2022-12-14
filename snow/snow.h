@@ -15,8 +15,8 @@ public:
     void draw();
 
 private:
-    Point position{};
-    float color[4]{};
+    Point position;
+    float color[4];
 
     float life;
     float fade;

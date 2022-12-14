@@ -3,6 +3,8 @@
 #include <ctime>
 #include <random>
 #include <iostream>
+#include <memory>
+#include <cstring>
 #include <GL/glut.h>
 
 #define WIDTH 1280
@@ -27,6 +29,11 @@ extern int flag_angle;
 typedef struct {
     GLfloat x, y, z;
 } Point;
+
+// store colors
+typedef struct {
+    GLfloat r, g, b, a;
+} Color;
 
 int randomInt(int, int);
 

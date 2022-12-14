@@ -139,7 +139,7 @@ void Cloth::draw() {
         }
     }
 
-    // draw the flag
+    // draw_Fragments the flag
     for (int y = 0; y < this->num_particles_h - 1; y++) {
         for (int x = 0; x < this->num_particles_w - 1; x++) {
             Vec3 color(1, 1, 1);
