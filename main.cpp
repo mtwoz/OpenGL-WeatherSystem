@@ -4,6 +4,7 @@ std::vector<Snow> snow;
 std::vector<Rain> rain;
 std::vector<Hail> hail;
 Camera camera;
+Texture texture;
 
 int weather = 0;
 bool wind_on = false;
@@ -81,6 +82,7 @@ void initDraw() {
     gluPerspective(30, 1.333333, 0.1, 1000);
 
     generateObjects();
+    texture.loadTexture();
 }
 
 void drawScene() {
@@ -104,6 +106,10 @@ void drawScene() {
         wind_velocity_z = sinf((float) flag_angle * DEG2RAD) * 0.05f * -1;
     }
 
+    glBindTexture(GL_TEXTURE_2D, texture.texture[0]);
+    Flag::draw();
+    glBindTexture(GL_TEXTURE_2D, -1);
+
     switch (weather) {
         case SNOW:
             for (auto &it: snow) {
@@ -125,8 +131,6 @@ void drawScene() {
     }
 
     Building::draw();
-
-    Flag::draw();
 
     glFlush();
     glutSwapBuffers();

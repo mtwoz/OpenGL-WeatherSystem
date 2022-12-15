@@ -29,11 +29,3 @@ bool randomBool() {
     uniform_int_distribution<int> distribution(0, 1);
     return distribution(generator);
 }
-
-// reset coordination system
-void resetCoordinationSystem() {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0, WIDTH, HEIGHT, 0);
-    glMatrixMode(GL_MODELVIEW);
-}

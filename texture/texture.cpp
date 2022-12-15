@@ -4,15 +4,21 @@ void Texture::readImage(const char *path, int &image_w, int &image_h, int &pixel
     GLubyte *pixel_data;
     FILE *p_file;
     p_file = fopen(path, "rb");
-    if (p_file == nullptr) exit(0);
+    if (p_file == nullptr) {
+        exit(0);
+    }
     fseek(p_file, 0x0012, SEEK_SET);
     fread(&image_w, sizeof(image_w), 1, p_file);
     fread(&image_h, sizeof(image_h), 1, p_file);
     pixel_l = image_w * 3;
-    while (pixel_l % 4 != 0)pixel_l++;
+    while (pixel_l % 4 != 0) {
+        pixel_l++;
+    }
     pixel_l *= image_h;
     pixel_data = (GLubyte *) malloc(pixel_l);
-    if (pixel_data == nullptr) exit(0);
+    if (pixel_data == nullptr) {
+        exit(0);
+    }
     fseek(p_file, 54, SEEK_SET);
     fread(pixel_data, pixel_l, 1, p_file);
     p.push_back(pixel_data);
@@ -25,7 +31,7 @@ void Texture::loadTexture() {
     glDepthFunc(GL_LEQUAL);
     glShadeModel(GL_FLAT);
     glEnable(GL_TEXTURE_2D);
-    this->readImage("../grass.bmp", this->image_width, this->image_height, this->pixel_length);
+    this->readImage("../cloth.bmp", this->image_width, this->image_height, this->pixel_length);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &texture[0]);
 

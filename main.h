@@ -10,7 +10,7 @@
 #include "hail.h"
 #include "flag.h"
 #include "camera.h"
-#include "ground.h"
+#include "texture.h"
 #include "building.h"
 
 #define SNOW 0

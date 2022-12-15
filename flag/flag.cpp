@@ -124,8 +124,8 @@ void Cloth::draw() {
     }
 
     // initial particle normals
-    for (int x = 0; x < this->num_particles_w - 1; x++) {
-        for (int y = 0; y < this->num_particles_h - 1; y++) {
+    for (int x = 0; x <= this->num_particles_w - 2; x++) {
+        for (int y = 0; y <= this->num_particles_h - 2; y++) {
             Vec3 normal = calcNormal(this->getParticle(x + 1, y), this->getParticle(x, y), this->getParticle(x, y + 1));
             this->getParticle(x + 1, y)->addToNormal(normal);
             this->getParticle(x, y)->addToNormal(normal);
@@ -140,11 +140,12 @@ void Cloth::draw() {
     }
 
     // draw_Fragments the flag
-    for (int y = 0; y < this->num_particles_h - 1; y++) {
-        for (int x = 0; x < this->num_particles_w - 1; x++) {
+    for (int y = 0; y <= this->num_particles_h - 2; y++) {
+        for (int x = 0; x <= this->num_particles_w - 2; x++) {
             Vec3 color(1, 1, 1);
 
             glBegin(GL_TRIANGLES);
+
             drawTriangle(this->getParticle(x, y + 1), this->getParticle(x, y), this->getParticle(x + 1, y), color);
             drawTriangle(this->getParticle(x + 1, y + 1), this->getParticle(x, y + 1), this->getParticle(x + 1, y),
                          color);
@@ -217,12 +218,15 @@ void Cloth::drawTriangle(Particle *p1, Particle *p2, Particle *p3, const Vec3 co
     Vec3 normal2 = p2->getNormal().normalized();
     Vec3 normal3 = p3->getNormal().normalized();
 
+    glTexCoord2i (0, 0);
     glNormal3fv((float *) &(normal1));
     glVertex3fv((float *) &(p1->getPos()));
 
+    glTexCoord2i (0, 1);
     glNormal3fv((float *) &(normal2));
     glVertex3fv((float *) &(p2->getPos()));
 
+    glTexCoord2i (1, 1);
     glNormal3fv((float *) &(normal3));
     glVertex3fv((float *) &(p3->getPos()));
 }
@@ -233,10 +237,11 @@ void Flag::draw() {
 
     glPushMatrix();
     glTranslatef(22.52, 10, 12.955);
-    glRotatef((float)flag_angle, 0.0f, 1.0f, 0.0f);
+    glRotatef((float) flag_angle, 0.0f, 1.0f, 0.0f);
     glScaled(0.2, 0.2, 0.2);
     cloth.draw();
 
+    glBindTexture(GL_TEXTURE_2D, -1);
     glColor3f(0.875, 0.875, 0.875);
     glutSolidSphere(0.3, 50, 50);
     glRotatef(90.0f, 1.0f, 0.0f, 0.0f);

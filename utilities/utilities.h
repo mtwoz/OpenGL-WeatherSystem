@@ -1,4 +1,5 @@
 #pragma once
+#define FREEGLUT_STATIC
 
 #include <ctime>
 #include <random>

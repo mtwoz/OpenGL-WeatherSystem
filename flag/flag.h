@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vec3.h"
+#include "texture.h"
 #include "utilities.h"
 
 #define Resistance 0.02
